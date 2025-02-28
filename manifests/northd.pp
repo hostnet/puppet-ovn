@@ -3,6 +3,10 @@
 #
 # installs ovn package starts the ovn-northd service
 #
+# [*package_name*]
+#   (Optional) Name of the northd package
+#   Default: ovn-central
+#
 # [*dbs_listen_ip*]
 #   The IP-Address where OVN DBs should be listening
 #   Defaults to '0.0.0.0'
@@ -16,6 +20,7 @@
 #   Defaults to undef
 #
 class ovn::northd(
+  $package_name = 'ovn-central',
   $dbs_listen_ip = '0.0.0.0',
   $dbs_cluster_local_addr = undef,
   $dbs_cluster_remote_addr = undef,
@@ -60,9 +65,9 @@ class ovn::northd(
     require   => Service['openvswitch']
   }
 
-  package { $::ovn::params::ovn_northd_package_name:
+  package { $package_name:
     ensure  => present,
-    name    => $::ovn::params::ovn_northd_package_name,
+    name    => $package_name,
     before  => Service['northd'],
     require => Package[$::vswitch::params::ovs_package_name]
   }

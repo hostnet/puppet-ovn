@@ -17,6 +17,10 @@
 #   (Required) IP address of the hypervisor(in which this module is installed) to which
 #   the other controllers would use to create a tunnel to this controller
 #
+# [*package_name*]
+#   (Optional) Name of the controller package
+#   Default: ovn-host
+# 
 # [*ovn_encap_tos*]
 #   (Optional) The value to be applied to OVN tunnel interface's option:tos.
 #   Defaults to undef
@@ -108,6 +112,7 @@
 class ovn::controller(
   $ovn_remote,
   $ovn_encap_ip,
+  $package_name                = 'ovn-host',
   $ovn_encap_type              = 'geneve',
   $ovn_encap_tos               = undef,
   $ovn_bridge_mappings         = [],
@@ -154,9 +159,9 @@ class ovn::controller(
     subscribe => Vs_config['external_ids:ovn-remote']
   }
 
-  package { $::ovn::params::ovn_controller_package_name:
+  package { $package_name:
     ensure => present,
-    name   => $::ovn::params::ovn_controller_package_name,
+    name   => $package_name,
     before => Service['controller']
   }
 
