@@ -51,7 +51,7 @@ class ovn::northd(
                           ' ')
 
   augeas { 'config-ovn-northd':
-    context => $::ovn::params::ovn_northd_context,
+    context => "${::ovn::params::ovn_northd_context}/${package_name}",
     changes => "set ${$::ovn::params::ovn_northd_option_name} '\"${ovn_northd_opts}\"'",
     before  => Service['northd'],
   }
